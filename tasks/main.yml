@@ -1,0 +1,6 @@
+---
+- name: "Log into private registry {{ registry_hostname }}"
+  docker_login:
+    registry: "{{ registry_hostname }}"
+    username: "{{ registry_user_email }}"
+    password: "{{ registry_user_passwd }}"
