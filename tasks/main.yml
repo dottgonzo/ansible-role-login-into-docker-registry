@@ -3,11 +3,11 @@
   include_tasks: registrylogin.yml
   when: 
     - registry_hostname is defined
-    - registries is undefined
+    - docker_registries is undefined
 
 - name: Login into Multiple Registries
   include_tasks: registrylogin.yml
-  loop: "{{ registries if registries is defined else [] }}"
+  loop: "{{ docker_registries if docker_registries is defined else [] }}"
   loop_control:
     loop_var: registry_item
   vars:
@@ -15,4 +15,4 @@
     registry_user_email: "{{ registry_item.registry_user_email }}"
     registry_user_passwd: "{{ registry_item.registry_user_passwd }}"
   when: 
-    - registries is defined
+    - docker_registries is defined
