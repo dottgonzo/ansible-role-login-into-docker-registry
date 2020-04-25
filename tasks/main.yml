@@ -1,6 +1,18 @@
 ---
-- name: "Log into private registry {{ registry_hostname }}"
-  docker_login:
-    registry: "{{ registry_hostname }}"
-    username: "{{ registry_user_email }}"
-    password: "{{ registry_user_passwd }}"
+- name: Login into single Registry
+  include_tasks: registrylogin.yml
+  when: 
+    - registry_hostname is defined
+    - registries is undefined
+
+- name: Login into Multiple Registries
+  include_tasks: registrylogin.yml
+  loop: "{{ registries if registries is defined else [] }}"
+  loop_control:
+    loop_var: registry_item
+  vars:
+    registry_hostname: "{{ registry_item.registry_hostname }}"
+    registry_user_email: "{{ registry_item.registry_user_email }}"
+    registry_user_passwd: "{{ registry_item.registry_user_passwd }}"
+  when: 
+    - registries is defined
